@@ -1,11 +1,15 @@
 <?php
 
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\TransactionsController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/products')->name('home');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('transactions', [TransactionsController::class, 'index'])
+        ->name('transactions.index');
+
     Route::get('products', [ProductsController::class, 'index'])
         ->name('products.index');
 

@@ -1,6 +1,6 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { setLayoutProps } from '@inertiajs/react';
-import { ChevronDown, ChevronUp, Pencil, Search, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, Pencil, Search, ShoppingBag, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { formatPrice } from '@/lib/money';
-import { create, edit, index, show } from '@/routes/products';
+import { create, edit, index, purchase, show } from '@/routes/products';
 import type { Auth, PaginatedProducts, Product, ProductFilters } from '@/types';
 
 type ProductsIndexProps = {
@@ -33,6 +33,7 @@ const SORTABLE_COLUMNS: Array<{ label: string; sort: string }> = [
 export default function ProductsIndex() {
     const { products, filters, auth } = usePage<ProductsIndexProps>().props;
     const canManage = auth.permissions.includes('products.manage');
+    const canPurchase = auth.permissions.includes('products.purchase');
 
     const [search, setSearch] = useState(filters.q ?? '');
     const lastSubmittedTerm = useRef<string>(filters.q ?? '');
@@ -182,6 +183,22 @@ export default function ProductsIndex() {
                                         </Badge>
                                     </td>
                                     <td className="px-4 py-3 text-right whitespace-nowrap">
+                                        {canPurchase && (
+                                            <Button
+                                                asChild
+                                                size="sm"
+                                                variant="outline"
+                                                disabled={product.quantity_available < 1}
+                                                className="mr-2"
+                                                data-test={`buy-${product.slug}`}
+                                            >
+                                                <Link href={purchase.url({ product: product.slug })}>
+                                                    <ShoppingBag className="size-4" />
+                                                    Buy
+                                                </Link>
+                                            </Button>
+                                        )}
+
                                         {canManage && (
                                             <div className="inline-flex gap-2">
                                                 <Button asChild size="sm" variant="outline">
