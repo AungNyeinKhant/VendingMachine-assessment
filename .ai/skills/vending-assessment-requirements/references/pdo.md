@@ -137,6 +137,7 @@ class PdoTransactionRepository implements TransactionRepositoryInterface
 ```
 
 Notes:
+
 - `$where` is built from code, never from input; only values are bound.
 - `LIMIT`/`OFFSET` placeholders need native prepares (Laravel's default for MySQL, `PDO::ATTR_EMULATE_PREPARES => false`). If you ever hit a quoting error there, bind them with `PDO::PARAM_INT` explicitly.
 - Wrap paginated results in `Illuminate\Pagination\LengthAwarePaginator` in the controller or a small mapper, so the Inertia page gets the same pagination shape as products.

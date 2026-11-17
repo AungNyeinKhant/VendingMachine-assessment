@@ -6,15 +6,16 @@ description: "How to write PHPUnit tests in this vending machine project: contro
 # Vending machine — testing
 
 The assessment grades tests explicitly:
+
 - **Task 14:** unit tests for `ProductsController` covering scenarios and edge cases.
 - **Task 15:** use dependency injection and mocking to test controller actions **independently of the database and other services**.
 
 So this project has two kinds of tests, and the difference is the point:
 
-| Kind | Folder | Database | What it proves |
-|---|---|---|---|
-| Unit | `tests/Unit/...` | **None.** No `RefreshDatabase`, no factories that persist, no `DB::` | One class's behavior in isolation, collaborators mocked |
-| Feature | `tests/Feature/...` | Yes (`RefreshDatabase`) | The wired-up system: routes, middleware, permissions, SQL, PDO repo |
+| Kind    | Folder              | Database                                                             | What it proves                                                      |
+| ------- | ------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Unit    | `tests/Unit/...`    | **None.** No `RefreshDatabase`, no factories that persist, no `DB::` | One class's behavior in isolation, collaborators mocked             |
+| Feature | `tests/Feature/...` | Yes (`RefreshDatabase`)                                              | The wired-up system: routes, middleware, permissions, SQL, PDO repo |
 
 A unit test that quietly hits the database defeats Task 15 — if you find yourself creating a model with `->create()` in `tests/Unit`, use `->make()` / `new Product([...])` instead, or move the test to Feature.
 
@@ -37,6 +38,7 @@ Pattern: mock the interfaces the controller's constructor asks for, construct th
 Full examples: [references/unit-tests.md](references/unit-tests.md).
 
 ### Edge cases worth a test (Task 14 asks for them)
+
 - index: invalid `sort` (`password`, `id; drop`) falls back to `name`; invalid `per_page` falls back to 10; `direction` other than `desc` → `asc`.
 - store/update/destroy: repository called once with validated data; redirect + flash.
 - purchase: success → redirect with receipt; insufficient stock → error on `quantity`; insufficient funds → error on `amount_paid`; product unavailable → error. Don't re-test validation rules here — that's the FormRequest's job and belongs in feature tests.

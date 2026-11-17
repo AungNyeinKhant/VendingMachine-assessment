@@ -3,6 +3,7 @@
 Copy the shape, not the exact names. Keep `declare(strict_types=1);` in every new PHP file.
 
 ## Contents
+
 1. Repository interface
 2. Eloquent repository
 3. Provider binding
@@ -115,6 +116,7 @@ class RepositoryServiceProvider extends ServiceProvider
     ];
 }
 ```
+
 Register it in `bootstrap/providers.php`.
 
 ## 4. DTO (list query with whitelist)
@@ -152,6 +154,7 @@ final readonly class ProductListQuery
     }
 }
 ```
+
 DTOs are `final readonly` — they are values, never mocked.
 
 ## 5. FormRequest
@@ -184,6 +187,7 @@ class StoreProductRequest extends FormRequest
     }
 }
 ```
+
 Update request: same rules, `->ignore($this->route('product'))` on unique. Mirror every rule in `resources/js/lib/validation.ts`.
 
 ## 6. Web controller (Inertia)
@@ -274,6 +278,7 @@ class ProductController extends Controller
     }
 }
 ```
+
 API controllers don't catch domain exceptions — their `render()` produces the JSON error.
 
 ## 8. Service with injected connection
@@ -336,6 +341,7 @@ class PurchaseService
     }
 }
 ```
+
 `$this->db` is the default connection — bound automatically (`ConnectionInterface` resolves to `db.connection`). In unit tests, mock it with `->shouldReceive('transaction')->andReturnUsing(fn ($cb) => $cb())`.
 
 ## 9. Domain exception
@@ -382,6 +388,7 @@ class InsufficientStockException extends DomainException
     public function status(): int { return 409; }
 }
 ```
+
 (One class per file in the real code.)
 
 ## 10. Money helper
@@ -418,4 +425,5 @@ final class Money
     }
 }
 ```
+
 `Money` is `final` and static on purpose: pure functions, tested directly, never mocked.

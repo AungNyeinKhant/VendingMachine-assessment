@@ -66,6 +66,7 @@ $this->app->singleton(JwtService::class, fn () => new JwtService(
     ttlSeconds: (int) config('services.jwt.ttl', 3600),
 ));
 ```
+
 `config/services.php`: `'jwt' => ['secret' => env('JWT_SECRET'), 'ttl' => env('JWT_TTL', 3600)]`. Fail fast at boot in production if the secret is shorter than 32 bytes.
 
 ## Guard
@@ -79,9 +80,11 @@ Auth::viaRequest('jwt', function (Request $request) {
     return $id ? User::find($id) : null;
 });
 ```
+
 (`app()` is acceptable here: provider boot code is wiring, not a domain class.)
 
 `config/auth.php`:
+
 ```php
 'guards' => [
     'web' => ['driver' => 'session', 'provider' => 'users'],
@@ -110,6 +113,7 @@ Route::prefix('v1')->group(function () {
     });
 });
 ```
+
 `auth:api` calls `shouldUse('api')`, so spatie's `permission:` middleware finds the JWT user. Together with `$guard_name = 'web'` on `User`, permission lookups use the seeded `web` permissions.
 
 ## Errors
@@ -132,5 +136,6 @@ public function login(Request $request): JsonResponse
     return response()->json($this->jwt->issue($user));
 }
 ```
+
 Same message for unknown email and wrong password (no user enumeration).
 Users deliberately have no repository: Fortify owns user persistence, so the API login reads the model directly. That's the one documented exception to "controllers don't query".

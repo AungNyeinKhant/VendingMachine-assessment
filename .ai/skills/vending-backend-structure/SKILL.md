@@ -17,17 +17,17 @@ Request ─► FormRequest ─► Controller ─► Service ─► Repository (i
                                         rules
 ```
 
-| Layer | Owns | Must not contain |
-|---|---|---|
-| `FormRequest` | Validation rules, authorization shortcut (`authorize()` may defer to policy) | Business logic |
-| Controller | Reading validated input, calling one repository/service method, returning Inertia/redirect/API resource, mapping domain exceptions to HTTP | Queries, money math, stock checks, `DB::` calls |
-| Service | Business rules spanning several steps or models (purchase, JWT) | HTTP concerns (requests, redirects, JSON) |
-| Repository | All persistence; returns models/DTOs | Business rules, validation |
-| Model | Relationships, casts, scopes, slug generation | Cross-model workflows |
+| Layer         | Owns                                                                                                                                       | Must not contain                                |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- |
+| `FormRequest` | Validation rules, authorization shortcut (`authorize()` may defer to policy)                                                               | Business logic                                  |
+| Controller    | Reading validated input, calling one repository/service method, returning Inertia/redirect/API resource, mapping domain exceptions to HTTP | Queries, money math, stock checks, `DB::` calls |
+| Service       | Business rules spanning several steps or models (purchase, JWT)                                                                            | HTTP concerns (requests, redirects, JSON)       |
+| Repository    | All persistence; returns models/DTOs                                                                                                       | Business rules, validation                      |
+| Model         | Relationships, casts, scopes, slug generation                                                                                              | Cross-model workflows                           |
 
 ### When do I need a service?
 
-Ask: *is there a rule that could be wrong?* If the method is "validate, then save" there is no rule — the controller calls the repository directly. If there are checks, calculations, locking, or several writes that must succeed together, it belongs in a service.
+Ask: _is there a rule that could be wrong?_ If the method is "validate, then save" there is no rule — the controller calls the repository directly. If there are checks, calculations, locking, or several writes that must succeed together, it belongs in a service.
 
 - Product create/update/delete/list → Controller → `ProductRepositoryInterface` (no service)
 - Purchase (lock row, check stock, check funds, compute change, decrement, log transaction) → `PurchaseService`

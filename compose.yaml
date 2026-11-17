@@ -1,0 +1,22 @@
+services:
+    mysql:
+        image: mysql:8
+        container_name: vending-mysql
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: vending
+            MYSQL_USER: vending
+            MYSQL_PASSWORD: vending
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - '3307:3306'
+        volumes:
+            - vending-mysql-data:/var/lib/mysql
+        healthcheck:
+            test: ['CMD', 'mysqladmin', 'ping', '-h', '127.0.0.1', '-uvending', '-pvending']
+            interval: 5s
+            timeout: 3s
+            retries: 10
+
+volumes:
+    vending-mysql-data:

@@ -13,19 +13,19 @@ Never quietly drop a task. Every task is either implemented literally (✍️), 
 
 ## Requirement map
 
-| # | Task (short) | How | Where |
-|---|---|---|---|
-| 1 | Describe DB setup | ✍️ | migrations, `docs/DATABASE.md` |
-| 2 | PDO connection class + CRUD | ✍️ + 📦 | `App\Database\PdoConnection`, `PdoTransactionRepository` (raw PDO); products via Eloquent repo; users via Fortify |
-| 3 | Sessions + password hashing | 📦 | Fortify (session guard, bcrypt) |
-| 4 | Role checks "stored in the session" | 📦 + 💬 | spatie permissions read from DB/cache, not session |
-| 5–6 | ProductsController CRUD + purchase | ✍️ | `ProductsController`, `PurchaseService` |
-| 7–9 | Views (CRUD, list, purchase) | 📦 + 💬 | Inertia React pages rendered by controllers |
-| 10 | Routing | 📦 | `routes/web.php`, `routes/api.php` |
-| 11 | Attribute routing for purchase | ✍️ + 📦 | `#[Get]`/`#[Post]` on `ProductsController` |
-| 12–13 | Validation server + client | 📦 + ✍️ | FormRequests + `resources/js/lib/validation.ts` |
-| 14–15 | PHPUnit, DI, mocking | ✍️ | see vending-testing |
-| 16–17 | REST API + JWT | ✍️ + 📦 | `/api/v1`, `JwtService` + custom guard |
+| #     | Task (short)                        | How     | Where                                                                                                             |
+| ----- | ----------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| 1     | Describe DB setup                   | ✍️      | migrations, `docs/DATABASE.md`                                                                                    |
+| 2     | PDO connection class + CRUD         | ✍️ + 📦 | `App\Database\PdoConnection`, `PdoTransactionRepository` (raw PDO); products via Eloquent repo; users via Fortify |
+| 3     | Sessions + password hashing         | 📦      | Fortify (session guard, bcrypt)                                                                                   |
+| 4     | Role checks "stored in the session" | 📦 + 💬 | spatie permissions read from DB/cache, not session                                                                |
+| 5–6   | ProductsController CRUD + purchase  | ✍️      | `ProductsController`, `PurchaseService`                                                                           |
+| 7–9   | Views (CRUD, list, purchase)        | 📦 + 💬 | Inertia React pages rendered by controllers                                                                       |
+| 10    | Routing                             | 📦      | `routes/web.php`, `routes/api.php`                                                                                |
+| 11    | Attribute routing for purchase      | ✍️ + 📦 | `#[Get]`/`#[Post]` on `ProductsController`                                                                        |
+| 12–13 | Validation server + client          | 📦 + ✍️ | FormRequests + `resources/js/lib/validation.ts`                                                                   |
+| 14–15 | PHPUnit, DI, mocking                | ✍️      | see vending-testing                                                                                               |
+| 16–17 | REST API + JWT                      | ✍️ + 📦 | `/api/v1`, `JwtService` + custom guard                                                                            |
 
 When you implement or change any of these, update the matching row in `docs/DECISIONS.md` so the documentation never drifts from the code.
 
@@ -37,6 +37,7 @@ Two small classes, both visible to a reviewer searching for "PDO":
 - `App\Repositories\Pdo\PdoTransactionRepository implements TransactionRepositoryInterface` — CRUD for `transactions` written in SQL with named placeholders.
 
 Rules that make it look senior rather than naive:
+
 - Prepared statements with named placeholders for every value. Never interpolate input into SQL. Sort columns, if ever needed, come from a whitelist.
 - Keep DECIMAL values as strings (PDO MySQL returns them as strings; don't cast to float).
 - Because the PDO handle is shared, `PurchaseService`'s `$db->transaction()` covers the PDO insert too — say so in a comment, it's the point of the design.
