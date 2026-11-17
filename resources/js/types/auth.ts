@@ -11,4 +11,6 @@ export type User = {
 
 export type Auth = {
     user: User;
+    /** Spatie permission names, shared so the UI can hide buttons (server still enforces). */
+    permissions: string[];
 };
