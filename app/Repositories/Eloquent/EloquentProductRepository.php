@@ -33,11 +33,17 @@ class EloquentProductRepository implements ProductRepositoryInterface
 
     public function create(array $attributes): Product
     {
+        $attributes['slug'] = (new Product)->slugify($attributes['name']);
+
         return Product::query()->create($attributes);
     }
 
     public function update(Product $product, array $attributes): Product
     {
+        if (isset($attributes['name']) && $attributes['name'] !== $product->name) {
+            $attributes['slug'] = $product->slugify($attributes['name']);
+        }
+
         $product->fill($attributes)->save();
 
         return $product->refresh();

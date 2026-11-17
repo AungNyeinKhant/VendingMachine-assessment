@@ -26,12 +26,12 @@ interface ProductRepositoryInterface
     public function findForUpdate(int $id): ?Product;
 
     /**
-     * @param  array{name: string, slug: string, price: string, quantity_available: int}  $attributes
+     * @param  array{name: string, price: string, quantity_available: int}  $attributes
      */
     public function create(array $attributes): Product;
 
     /**
-     * @param  array{name?: string, slug?: string, price?: string, quantity_available?: int}  $attributes
+     * @param  array{name?: string, price?: string, quantity_available?: int}  $attributes
      */
     public function update(Product $product, array $attributes): Product;
 
