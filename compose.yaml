@@ -14,7 +14,16 @@ services:
             - vending-mysql-data:/var/lib/mysql
             - ./docker/mysql/init:/docker-entrypoint-initdb.d
         healthcheck:
-            test: ['CMD', 'mysqladmin', 'ping', '-h', '127.0.0.1', '-uvending', '-pvending']
+            test:
+                [
+                    'CMD',
+                    'mysqladmin',
+                    'ping',
+                    '-h',
+                    '127.0.0.1',
+                    '-uvending',
+                    '-pvending',
+                ]
             interval: 5s
             timeout: 3s
             retries: 10

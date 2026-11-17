@@ -26,5 +26,7 @@ export function previewTotal(price: string, quantity: number): string {
 
 /** Change preview: amount inserted − total (display only, may be negative). */
 export function previewChange(amountPaid: string, total: string): string {
-    return formatPrice((Number.parseFloat(amountPaid) || 0) - (Number.parseFloat(total) || 0));
+    return formatPrice(
+        (Number.parseFloat(amountPaid) || 0) - (Number.parseFloat(total) || 0),
+    );
 }

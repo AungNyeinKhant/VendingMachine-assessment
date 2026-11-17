@@ -15,7 +15,10 @@ export default function EditProduct() {
     setLayoutProps({
         breadcrumbs: [
             { title: 'Products', href: index() },
-            { title: `Edit ${product.name}`, href: edit.url({ product: product.slug }) },
+            {
+                title: `Edit ${product.name}`,
+                href: edit.url({ product: product.slug }),
+            },
         ],
     });
 

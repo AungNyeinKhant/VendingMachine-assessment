@@ -40,12 +40,24 @@ export default function ShowProduct() {
                     </CardHeader>
                     <CardContent className="grid gap-3">
                         <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">Price</span>
-                            <span className="font-medium">{formatPrice(product.price)}</span>
+                            <span className="text-sm text-muted-foreground">
+                                Price
+                            </span>
+                            <span className="font-medium">
+                                {formatPrice(product.price)}
+                            </span>
                         </div>
                         <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">In stock</span>
-                            <Badge variant={product.quantity_available > 0 ? 'secondary' : 'destructive'}>
+                            <span className="text-sm text-muted-foreground">
+                                In stock
+                            </span>
+                            <Badge
+                                variant={
+                                    product.quantity_available > 0
+                                        ? 'secondary'
+                                        : 'destructive'
+                                }
+                            >
                                 {product.quantity_available}
                             </Badge>
                         </div>
@@ -53,7 +65,13 @@ export default function ShowProduct() {
                         <div className="flex gap-2 pt-2">
                             {canManage && (
                                 <Button asChild variant="outline">
-                                    <Link href={edit.url({ product: product.slug })}>Edit</Link>
+                                    <Link
+                                        href={edit.url({
+                                            product: product.slug,
+                                        })}
+                                    >
+                                        Edit
+                                    </Link>
                                 </Button>
                             )}
                         </div>

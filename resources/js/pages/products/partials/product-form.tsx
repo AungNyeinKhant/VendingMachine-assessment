@@ -21,12 +21,18 @@ type ProductFormData = {
     quantity_available: string;
 };
 
-export default function ProductForm({ product, submitUrl, submitMethod, submitLabel }: ProductFormProps) {
-    const { data, setData, post, put, processing, errors } = useForm<ProductFormData>({
-        name: product?.name ?? '',
-        price: product?.price ?? '',
-        quantity_available: String(product?.quantity_available ?? ''),
-    });
+export default function ProductForm({
+    product,
+    submitUrl,
+    submitMethod,
+    submitLabel,
+}: ProductFormProps) {
+    const { data, setData, post, put, processing, errors } =
+        useForm<ProductFormData>({
+            name: product?.name ?? '',
+            price: product?.price ?? '',
+            quantity_available: String(product?.quantity_available ?? ''),
+        });
 
     const [clientErrors, setClientErrors] = useState<FormErrors>({});
 
@@ -43,9 +49,9 @@ export default function ProductForm({ product, submitUrl, submitMethod, submitLa
         }
 
         if (submitMethod === 'put') {
-            void put(submitUrl);
+            put(submitUrl);
         } else {
-            void post(submitUrl);
+            post(submitUrl);
         }
     }
 
@@ -64,7 +70,10 @@ export default function ProductForm({ product, submitUrl, submitMethod, submitLa
                     placeholder="e.g. Coke"
                 />
 
-                <InputError className="mt-2" message={clientErrors.name ?? errors.name} />
+                <InputError
+                    className="mt-2"
+                    message={clientErrors.name ?? errors.name}
+                />
             </div>
 
             <div className="grid gap-2">
@@ -83,7 +92,10 @@ export default function ProductForm({ product, submitUrl, submitMethod, submitLa
                     placeholder="e.g. 6.885"
                 />
 
-                <InputError className="mt-2" message={clientErrors.price ?? errors.price} />
+                <InputError
+                    className="mt-2"
+                    message={clientErrors.price ?? errors.price}
+                />
             </div>
 
             <div className="grid gap-2">
@@ -96,19 +108,28 @@ export default function ProductForm({ product, submitUrl, submitMethod, submitLa
                     step="1"
                     min="0"
                     value={data.quantity_available}
-                    onChange={(event) => setData('quantity_available', event.target.value)}
+                    onChange={(event) =>
+                        setData('quantity_available', event.target.value)
+                    }
                     required
                     placeholder="e.g. 10"
                 />
 
                 <InputError
                     className="mt-2"
-                    message={clientErrors.quantity_available ?? errors.quantity_available}
+                    message={
+                        clientErrors.quantity_available ??
+                        errors.quantity_available
+                    }
                 />
             </div>
 
             <div className="flex items-center gap-4">
-                <Button type="submit" disabled={processing} data-test="product-form-submit">
+                <Button
+                    type="submit"
+                    disabled={processing}
+                    data-test="product-form-submit"
+                >
                     {submitLabel}
                 </Button>
             </div>
