@@ -48,19 +48,19 @@ php artisan serve
 
 ## Task Coverage (17 Tasks)
 
-| # | Task | Implementation |
-|---|------|----------------|
-| 1 | DB Design | Migrations + `docs/DATABASE.md` (ERD, rationale) |
-| 2 | PDO CRUD | `App\Database\PdoConnection` + `PdoTransactionRepository` (raw PDO, shared connection) |
-| 3 | Sessions + Hashing | Laravel Fortify (session guard, bcrypt) |
-| 4 | RBAC | spatie/laravel-permission (permissions checked, not roles in session/JWT) |
-| 5–6 | ProductsController | CRUD + purchase via `PurchaseService` |
-| 7–9 | Views | Inertia React pages (products CRUD, list with pagination/sort, purchase) |
-| 10 | Routing | `routes/web.php`, `routes/api.php` |
-| 11 | Attribute Routing | `#[Get]`/`#[Post]` on purchase actions (`spatie/laravel-route-attributes`) |
-| 12–13 | Validation | FormRequests + `resources/js/lib/validation.ts` mirror |
-| 14–15 | Tests, DI, Mocking | Unit tests (mocked, no DB) + Feature tests (MySQL) |
-| 16–17 | REST API + JWT | `/api/v1`, JWT HS256, Scribe docs at `/docs` |
+| #     | Task               | Implementation                                                                         |
+| ----- | ------------------ | -------------------------------------------------------------------------------------- |
+| 1     | DB Design          | Migrations + `docs/DATABASE.md` (ERD, rationale)                                       |
+| 2     | PDO CRUD           | `App\Database\PdoConnection` + `PdoTransactionRepository` (raw PDO, shared connection) |
+| 3     | Sessions + Hashing | Laravel Fortify (session guard, bcrypt)                                                |
+| 4     | RBAC               | spatie/laravel-permission (permissions checked, not roles in session/JWT)              |
+| 5–6   | ProductsController | CRUD + purchase via `PurchaseService`                                                  |
+| 7–9   | Views              | Inertia React pages (products CRUD, list with pagination/sort, purchase)               |
+| 10    | Routing            | `routes/web.php`, `routes/api.php`                                                     |
+| 11    | Attribute Routing  | `#[Get]`/`#[Post]` on purchase actions (`spatie/laravel-route-attributes`)             |
+| 12–13 | Validation         | FormRequests + `resources/js/lib/validation.ts` mirror                                 |
+| 14–15 | Tests, DI, Mocking | Unit tests (mocked, no DB) + Feature tests (MySQL)                                     |
+| 16–17 | REST API + JWT     | `/api/v1`, JWT HS256, Scribe docs at `/docs`                                           |
 
 ## Testing
 
@@ -86,7 +86,7 @@ GitHub Actions (`.github/workflows/tests.yml`): PHP 8.4, MySQL 8, Pint, PHPStan,
 
 ## AI Assistance
 
-This project was AI-assisted (architecture, decisions, and code review by human). Commits retain `Co-Authored-By` for transparency.
+This project was built with AI coding assistants (Claude Code for planning and code review, OpenCode for implementation). The architecture, the trade-offs in [docs/DECISIONS.md](docs/DECISIONS.md) and the final review are mine; every change was checked against the test suite and reviewed before merging.
 
 ## License
 

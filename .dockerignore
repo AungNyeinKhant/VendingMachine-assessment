@@ -1,48 +1,48 @@
-# Dependencies
+# Dependencies & build output (rebuilt inside the image)
 vendor/
 node_modules/
-
-# Build outputs
 public/build/
 public/hot
+resources/js/actions/
+resources/js/routes/
+resources/js/wayfinder/
 
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
+# Local caches — packages.php lists dev-only providers (Boost, Pail) that
+# don't exist in a --no-dev install and would break the app at boot.
+bootstrap/cache/*.php
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+storage/*.key
 
-# Git
-.git/
-.gitignore
-
-# Environment
+# Secrets & local config
 .env
 .env.*
 !.env.example
+auth.json
 
-# Logs
-storage/logs/*.log
-*.log
-
-# Testing
-phpunit.xml
+# Tooling not needed at runtime
+.git/
+.github/
+.idea/
+.vscode/
+.ai/
+.claude/
+.agents/
+.mcp.json
+AGENTS.md
+CLAUDE.md
+boost.json
+opencode.json
 tests/
-
-# Documentation
+phpunit.xml
+.phpunit.cache
 docs/
-README.md
-
-# Docker
+*.md
+docker-compose*.yml
+compose.yaml
 Dockerfile
 .dockerignore
-docker-compose*.yml
-docker-compose*.yaml
-
-# OS
 .DS_Store
 Thumbs.db
-
-# Misc
-*.md
-!README.md
