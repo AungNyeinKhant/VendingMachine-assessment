@@ -112,6 +112,6 @@ class ProductsController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Purchase completed.')]);
 
-        return to_route('products.purchase', $product)->flash('receipt', $receipt->toArray());
+        return to_route('products.purchase', $product)->with('receipt', $receipt->toArray());
     }
 }

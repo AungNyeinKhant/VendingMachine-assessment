@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin Transaction */
+/**
+ * Transaction resource that works with both Eloquent models and raw PDO arrays.
+ */
 class TransactionResource extends JsonResource
 {
     /**
@@ -16,16 +17,26 @@ class TransactionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $resource = $this->resource;
+
+        $createdAt = $resource['created_at'] ?? $resource->created_at ?? null;
+        $createdAtString = '';
+        if ($createdAt instanceof \DateTimeInterface) {
+            $createdAtString = $createdAt->toIso8601String();
+        } elseif (is_string($createdAt)) {
+            $createdAtString = $createdAt;
+        }
+
         return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'product_id' => $this->product_id,
-            'quantity' => $this->quantity,
-            'unit_price' => (string) $this->unit_price,
-            'total_price' => (string) $this->total_price,
-            'amount_paid' => (string) $this->amount_paid,
-            'change_given' => (string) $this->change_given,
-            'created_at' => $this->created_at?->toIso8601String(),
+            'id' => $resource['id'] ?? $resource->id ?? 0,
+            'user_id' => $resource['user_id'] ?? $resource->user_id ?? 0,
+            'product_id' => $resource['product_id'] ?? $resource->product_id ?? 0,
+            'quantity' => $resource['quantity'] ?? $resource->quantity ?? 0,
+            'unit_price' => (string) ($resource['unit_price'] ?? $resource->unit_price ?? '0'),
+            'total_price' => (string) ($resource['total_price'] ?? $resource->total_price ?? '0'),
+            'amount_paid' => (string) ($resource['amount_paid'] ?? $resource->amount_paid ?? '0'),
+            'change_given' => (string) ($resource['change_given'] ?? $resource->change_given ?? '0'),
+            'created_at' => $createdAtString,
         ];
     }
 }

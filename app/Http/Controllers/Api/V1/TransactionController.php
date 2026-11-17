@@ -26,6 +26,8 @@ class TransactionController extends Controller
             ? null
             : $request->user()?->id;
 
-        return TransactionResource::collection($this->transactions->paginateForUser($scope, $query->perPage, $query->page));
+        $result = $this->transactions->paginateForUser($scope, $query->perPage, $query->page);
+
+        return TransactionResource::collection($result['data']);
     }
 }
