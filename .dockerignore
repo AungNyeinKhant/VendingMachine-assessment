@@ -1,0 +1,48 @@
+# Dependencies
+vendor/
+node_modules/
+
+# Build outputs
+public/build/
+public/hot
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+storage/logs/*.log
+*.log
+
+# Testing
+phpunit.xml
+tests/
+
+# Documentation
+docs/
+README.md
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+docker-compose*.yaml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.md
+!README.md
