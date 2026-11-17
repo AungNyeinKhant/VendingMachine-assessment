@@ -18,12 +18,12 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->unique()->words(2, true);
+        $name = fake()->unique()->word().' '.fake()->word();
 
         return [
             'name' => $name,
             'slug' => Str::slug($name),
-            'price' => fake()->randomFloat(3, 0.5, 20),
+            'price' => number_format(fake()->randomFloat(3, 0.5, 20), 3, '.', ''),
             'quantity_available' => fake()->numberBetween(1, 50),
         ];
     }

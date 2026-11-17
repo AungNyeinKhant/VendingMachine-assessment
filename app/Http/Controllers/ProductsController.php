@@ -45,7 +45,7 @@ class ProductsController extends Controller
 
     public function store(StoreProductRequest $request): RedirectResponse
     {
-        $product = $this->products->create($request->validated());
+        $product = $this->products->create($request->productData());
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Product created.')]);
 
@@ -68,7 +68,7 @@ class ProductsController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
-        $product = $this->products->update($product, $request->validated());
+        $product = $this->products->update($product, $request->productData());
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Product updated.')]);
 
@@ -111,7 +111,9 @@ class ProductsController extends Controller
         }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Purchase completed.')]);
+        // Inertia flash (not ->with()): the page reads it from usePage().flash.receipt.
+        Inertia::flash('receipt', $receipt->toArray());
 
-        return to_route('products.purchase', $product)->with('receipt', $receipt->toArray());
+        return to_route('products.purchase', $product);
     }
 }

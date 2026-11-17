@@ -49,8 +49,10 @@ class PurchaseTest extends TestCase
 
         $this->actingAs($buyer)
             ->post(route('products.purchase.store', $product), ['quantity' => 3, 'amount_paid' => '25'])
-            ->assertRedirect()
-            ->assertSessionHasNoErrors();
+            ->assertRedirect(route('products.purchase', $product))
+            ->assertSessionHasNoErrors()
+            ->assertInertiaFlash('receipt.total_price', '20.655')
+            ->assertInertiaFlash('receipt.change_given', '4.345');
 
         $this->assertSame(2, $product->fresh()->quantity_available);
         $this->assertDatabaseHas('transactions', [

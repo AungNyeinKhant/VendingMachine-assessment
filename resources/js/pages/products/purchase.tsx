@@ -38,17 +38,23 @@ export default function PurchasePage() {
     const { product, auth } = usePage<PurchasePageProps>().props;
     const receipt = usePage<{ flash: { receipt?: Receipt } }>().flash.receipt;
 
-    const { data, setData, post, processing, errors } = useForm<PurchaseFormData>({
-        quantity: '1',
-        amount_paid: '',
-    });
+    const { data, setData, post, processing, errors } =
+        useForm<PurchaseFormData>({
+            quantity: '1',
+            amount_paid: '',
+        });
 
-    const [clientErrors, setClientErrors] = useState<Record<string, string>>({});
+    const [clientErrors, setClientErrors] = useState<Record<string, string>>(
+        {},
+    );
 
     setLayoutProps({
         breadcrumbs: [
             { title: 'Products', href: productsIndex() },
-            { title: `Buy ${product.name}`, href: purchase.url({ product: product.slug }) },
+            {
+                title: `Buy ${product.name}`,
+                href: purchase.url({ product: product.slug }),
+            },
         ],
     });
 
@@ -65,7 +71,7 @@ export default function PurchasePage() {
             return;
         }
 
-        void post(purchaseStore.url({ product: product.slug }));
+        post(purchaseStore.url({ product: product.slug }));
     }
 
     return (
@@ -82,18 +88,30 @@ export default function PurchasePage() {
                     <CardHeader>
                         <CardTitle className="flex items-center justify-between">
                             <span>{product.name}</span>
-                            <span className="font-normal">{formatPrice(product.price)} each</span>
+                            <span className="font-normal">
+                                {formatPrice(product.price)} each
+                            </span>
                         </CardTitle>
                         <CardDescription>
                             In stock:{' '}
-                            <Badge variant={product.quantity_available > 0 ? 'secondary' : 'destructive'}>
+                            <Badge
+                                variant={
+                                    product.quantity_available > 0
+                                        ? 'secondary'
+                                        : 'destructive'
+                                }
+                            >
                                 {product.quantity_available}
                             </Badge>
                         </CardDescription>
                     </CardHeader>
 
                     <CardContent className="space-y-6">
-                        <form onSubmit={submit} className="space-y-6" noValidate>
+                        <form
+                            onSubmit={submit}
+                            className="space-y-6"
+                            noValidate
+                        >
                             <div className="grid gap-2">
                                 <Label htmlFor="quantity">Quantity</Label>
 
@@ -105,15 +123,25 @@ export default function PurchasePage() {
                                     min="1"
                                     max={product.quantity_available}
                                     value={data.quantity}
-                                    onChange={(event) => setData('quantity', event.target.value)}
+                                    onChange={(event) =>
+                                        setData('quantity', event.target.value)
+                                    }
                                     required
                                 />
 
-                                <InputError className="mt-2" message={clientErrors.quantity ?? errors.quantity} />
+                                <InputError
+                                    className="mt-2"
+                                    message={
+                                        clientErrors.quantity ?? errors.quantity
+                                    }
+                                />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="amount_paid" className="flex items-center gap-1">
+                                <Label
+                                    htmlFor="amount_paid"
+                                    className="flex items-center gap-1"
+                                >
                                     <Banknote className="size-4" />
                                     Amount inserted (USD)
                                 </Label>
@@ -125,14 +153,22 @@ export default function PurchasePage() {
                                     step="0.001"
                                     min="0.001"
                                     value={data.amount_paid}
-                                    onChange={(event) => setData('amount_paid', event.target.value)}
+                                    onChange={(event) =>
+                                        setData(
+                                            'amount_paid',
+                                            event.target.value,
+                                        )
+                                    }
                                     required
                                     placeholder="e.g. 20"
                                 />
 
                                 <InputError
                                     className="mt-2"
-                                    message={clientErrors.amount_paid ?? errors.amount_paid}
+                                    message={
+                                        clientErrors.amount_paid ??
+                                        errors.amount_paid
+                                    }
                                 />
                             </div>
 
@@ -143,7 +179,12 @@ export default function PurchasePage() {
                                         type="button"
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => setData('amount_paid', amount.toFixed(3))}
+                                        onClick={() =>
+                                            setData(
+                                                'amount_paid',
+                                                amount.toFixed(3),
+                                            )
+                                        }
                                         data-test={`quick-${amount}`}
                                     >
                                         ${amount}
@@ -158,19 +199,34 @@ export default function PurchasePage() {
                                         <Coins className="size-4" />
                                         Total
                                     </span>
-                                    <span data-test="preview-total">{previewTotal(product.price, quantity)}</span>
+                                    <span data-test="preview-total">
+                                        {previewTotal(product.price, quantity)}
+                                    </span>
                                 </div>
                                 <Separator />
                                 <div className="flex items-center justify-between">
-                                    <span className="text-muted-foreground">Change</span>
+                                    <span className="text-muted-foreground">
+                                        Change
+                                    </span>
                                     <span data-test="preview-change">
-                                        {previewChange(data.amount_paid, (Number.parseFloat(product.price) * quantity).toFixed(3))}
+                                        {previewChange(
+                                            data.amount_paid,
+                                            (
+                                                Number.parseFloat(
+                                                    product.price,
+                                                ) * quantity
+                                            ).toFixed(3),
+                                        )}
                                     </span>
                                 </div>
                             </div>
 
                             {canPurchase && (
-                                <Button type="submit" disabled={processing} data-test="purchase-submit">
+                                <Button
+                                    type="submit"
+                                    disabled={processing}
+                                    data-test="purchase-submit"
+                                >
                                     <ShoppingCart className="size-4" />
                                     Buy {quantity > 1 ? `${quantity} ` : ''}
                                     {product.name}
@@ -188,8 +244,13 @@ export default function PurchasePage() {
 
 function ReceiptCard({ receipt }: { receipt: Receipt }) {
     return (
-        <div className="rounded-lg border p-4 text-sm" data-test="purchase-receipt">
-            <p className="mb-3 font-medium">Receipt #{receipt.transaction_id}</p>
+        <div
+            className="rounded-lg border p-4 text-sm"
+            data-test="purchase-receipt"
+        >
+            <p className="mb-3 font-medium">
+                Receipt #{receipt.transaction_id}
+            </p>
 
             <dl className="grid gap-1.5">
                 {[
@@ -200,7 +261,10 @@ function ReceiptCard({ receipt }: { receipt: Receipt }) {
                     ['Inserted', formatPrice(receipt.amount_paid)],
                     ['Change', formatPrice(receipt.change_given)],
                 ].map(([label, value]) => (
-                    <div key={label} className="flex items-center justify-between">
+                    <div
+                        key={label}
+                        className="flex items-center justify-between"
+                    >
                         <dt className="text-muted-foreground">{label}</dt>
                         <dd>{value}</dd>
                     </div>

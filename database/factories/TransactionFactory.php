@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Support\Money;
 use Illuminate\Database\Eloquent\Factories\Factory;

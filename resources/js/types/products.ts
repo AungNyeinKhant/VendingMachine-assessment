@@ -9,12 +9,17 @@ export type Product = {
     updated_at: string;
 };
 
-/** Paginated product list as sent by Laravel's paginator over Inertia. */
-export type PaginatedProducts = {
-    data: Product[];
+/**
+ * A LengthAwarePaginator serialized by Laravel: the pagination fields sit at
+ * the top level next to `data` (there is no `meta` wrapper — that shape only
+ * exists for API Resources).
+ */
+export type Paginated<T> = PaginatorMeta & {
+    data: T[];
     links: PaginatorLink[];
-    meta?: PaginatorMeta;
 };
+
+export type PaginatedProducts = Paginated<Product>;
 
 export type PaginatorLink = {
     url: string | null;

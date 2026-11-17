@@ -39,6 +39,7 @@ class TransactionsController extends Controller
      * meta-based pagination component pattern as products.
      *
      * @param  array{data: list<array<string, mixed>>, total: int}  $rows
+     * @return LengthAwarePaginator<int, array<string, mixed>>
      */
     private function toPaginator(array $rows, TransactionListQuery $query, Request $request): LengthAwarePaginator
     {

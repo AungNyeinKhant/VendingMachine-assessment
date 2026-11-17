@@ -14,6 +14,9 @@ final readonly class ProductListQuery
 
     public const PER_PAGE = [5, 10, 25];
 
+    /**
+     * @param  'asc'|'desc'  $direction
+     */
     public function __construct(
         public string $sort = 'name',
         public string $direction = 'asc',
@@ -29,7 +32,8 @@ final readonly class ProductListQuery
         $sort = in_array($input['sort'] ?? null, self::SORTABLE, true) ? (string) $input['sort'] : 'name';
         $direction = ($input['direction'] ?? null) === 'desc' ? 'desc' : 'asc';
         $perPage = in_array((int) ($input['per_page'] ?? 0), self::PER_PAGE, true) ? (int) $input['per_page'] : 10;
-        $search = trim((string) ($input['q'] ?? '')) ?: null;
+        // ?q[]=x arrives as an array — ignore anything that isn't a plain string.
+        $search = is_string($input['q'] ?? null) ? (trim($input['q']) ?: null) : null;
 
         return new self($sort, $direction, $perPage, $search);
     }

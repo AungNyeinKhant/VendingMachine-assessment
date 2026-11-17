@@ -22,7 +22,8 @@ abstract class DomainException extends RuntimeException
 
     public function render(Request $request): ?JsonResponse
     {
-        if (! $request->expectsJson()) {
+        // API clients don't always send "Accept: application/json"; /api/* is JSON regardless.
+        if (! $request->expectsJson() && ! $request->is('api/*')) {
             return null; // web flow: the controller turns this into a ValidationException
         }
 

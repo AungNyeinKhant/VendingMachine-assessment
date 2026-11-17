@@ -159,4 +159,39 @@ class ProductsTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonPath('errors.amount_paid.0', 'You need to insert at least 6.885 USD.');
     }
+
+    public function test_purchase_accepts_form_encoded_body(): void
+    {
+        $product = Product::factory()->create(['price' => '6.885', 'quantity_available' => 5]);
+        $token = $this->tokenFor('user');
+
+        // Form fields arrive as strings ("2"); the controller must still pass an int to the service.
+        $this->withToken($token)
+            ->post("/api/v1/products/{$product->id}/purchase", ['quantity' => '2', 'amount_paid' => '20'])
+            ->assertCreated()
+            ->assertJsonPath('total_price', '13.770')
+            ->assertJsonPath('change_given', '6.230');
+    }
+
+    public function test_domain_errors_are_json_even_without_accept_header(): void
+    {
+        $product = Product::factory()->create(['quantity_available' => 1]);
+        $token = $this->tokenFor('user');
+
+        $this->withToken($token)
+            ->post("/api/v1/products/{$product->id}/purchase", ['quantity' => '5', 'amount_paid' => '100'])
+            ->assertStatus(409)
+            ->assertJsonStructure(['message', 'errors' => ['quantity']]);
+    }
+
+    public function test_unknown_or_non_numeric_product_id_is_404(): void
+    {
+        $this->getJson('/api/v1/products/999999')->assertNotFound();
+        $this->getJson('/api/v1/products/abc')->assertNotFound();
+    }
+
+    private function tokenFor(string $role): string
+    {
+        return app(JwtService::class)->issue(User::factory()->create()->assignRole($role))['access_token'];
+    }
 }

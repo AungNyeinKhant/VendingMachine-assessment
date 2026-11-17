@@ -1,4 +1,4 @@
-import type { PaginatorMeta } from './products';
+import type { Paginated } from './products';
 
 export type Transaction = {
     id: number;
@@ -16,7 +16,4 @@ export type Transaction = {
     user_name: string;
 };
 
-export type PaginatedTransactions = {
-    data: Transaction[];
-    meta?: PaginatorMeta;
-};
+export type PaginatedTransactions = Paginated<Transaction>;

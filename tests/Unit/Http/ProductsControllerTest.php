@@ -60,7 +60,7 @@ class ProductsControllerTest extends TestCase
         $product = $this->product();
         $data = ['name' => 'Coke Updated', 'price' => '4.990', 'quantity_available' => 5];
         $request = Mockery::mock(UpdateProductRequest::class);
-        $request->shouldReceive('validated')->andReturn($data);
+        $request->shouldReceive('productData')->andReturn($data);
 
         $this->products->shouldReceive('update')->once()->with($product, $data)->andReturn($product);
 

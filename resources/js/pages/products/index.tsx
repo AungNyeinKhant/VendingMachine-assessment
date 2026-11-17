@@ -1,6 +1,13 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { setLayoutProps } from '@inertiajs/react';
-import { ChevronDown, ChevronUp, Pencil, Search, ShoppingBag, Trash2 } from 'lucide-react';
+import {
+    ChevronDown,
+    ChevronUp,
+    Pencil,
+    Search,
+    ShoppingBag,
+    Trash2,
+} from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
@@ -81,7 +88,10 @@ export default function ProductsIndex() {
     function toggleSort(column: string) {
         applyFilters({
             sort: column,
-            direction: filters.sort === column && filters.direction === 'asc' ? 'desc' : 'asc',
+            direction:
+                filters.sort === column && filters.direction === 'asc'
+                    ? 'desc'
+                    : 'asc',
         });
     }
 
@@ -89,7 +99,7 @@ export default function ProductsIndex() {
         applyFilters({ page });
     }
 
-    const meta = products.meta;
+    const meta = products;
 
     return (
         <>
@@ -123,9 +133,17 @@ export default function ProductsIndex() {
 
                     <Select
                         value={String(filters.per_page)}
-                        onValueChange={(value) => applyFilters({ per_page: Number(value), page: undefined })}
+                        onValueChange={(value) =>
+                            applyFilters({
+                                per_page: Number(value),
+                                page: undefined,
+                            })
+                        }
                     >
-                        <SelectTrigger className="w-36" data-test="per-page-select">
+                        <SelectTrigger
+                            className="w-36"
+                            data-test="per-page-select"
+                        >
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -139,7 +157,10 @@ export default function ProductsIndex() {
                 </div>
 
                 <div className="overflow-x-auto rounded-xl border">
-                    <table className="w-full text-sm" data-test="products-table">
+                    <table
+                        className="w-full text-sm"
+                        data-test="products-table"
+                    >
                         <thead className="bg-muted/50 text-left">
                             <tr>
                                 {SORTABLE_COLUMNS.map((column) => (
@@ -147,7 +168,9 @@ export default function ProductsIndex() {
                                         <button
                                             type="button"
                                             className="flex items-center gap-1 hover:text-foreground"
-                                            onClick={() => toggleSort(column.sort)}
+                                            onClick={() =>
+                                                toggleSort(column.sort)
+                                            }
                                             data-test={`sort-${column.sort}`}
                                         >
                                             {column.label}
@@ -160,7 +183,9 @@ export default function ProductsIndex() {
                                         </button>
                                     </th>
                                 ))}
-                                <th className="px-4 py-3 text-right">Actions</th>
+                                <th className="px-4 py-3 text-right">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -168,16 +193,24 @@ export default function ProductsIndex() {
                                 <tr key={product.id} className="border-t">
                                     <td className="px-4 py-3">
                                         <Link
-                                            href={show.url({ product: product.slug })}
+                                            href={show.url({
+                                                product: product.slug,
+                                            })}
                                             className="font-medium hover:underline"
                                         >
                                             {product.name}
                                         </Link>
                                     </td>
-                                    <td className="px-4 py-3">{formatPrice(product.price)}</td>
+                                    <td className="px-4 py-3">
+                                        {formatPrice(product.price)}
+                                    </td>
                                     <td className="px-4 py-3">
                                         <Badge
-                                            variant={product.quantity_available > 0 ? 'secondary' : 'destructive'}
+                                            variant={
+                                                product.quantity_available > 0
+                                                    ? 'secondary'
+                                                    : 'destructive'
+                                            }
                                         >
                                             {product.quantity_available}
                                         </Badge>
@@ -188,11 +221,18 @@ export default function ProductsIndex() {
                                                 asChild
                                                 size="sm"
                                                 variant="outline"
-                                                disabled={product.quantity_available < 1}
+                                                disabled={
+                                                    product.quantity_available <
+                                                    1
+                                                }
                                                 className="mr-2"
                                                 data-test={`buy-${product.slug}`}
                                             >
-                                                <Link href={purchase.url({ product: product.slug })}>
+                                                <Link
+                                                    href={purchase.url({
+                                                        product: product.slug,
+                                                    })}
+                                                >
                                                     <ShoppingBag className="size-4" />
                                                     Buy
                                                 </Link>
@@ -201,9 +241,16 @@ export default function ProductsIndex() {
 
                                         {canManage && (
                                             <div className="inline-flex gap-2">
-                                                <Button asChild size="sm" variant="outline">
+                                                <Button
+                                                    asChild
+                                                    size="sm"
+                                                    variant="outline"
+                                                >
                                                     <Link
-                                                        href={edit.url({ product: product.slug })}
+                                                        href={edit.url({
+                                                            product:
+                                                                product.slug,
+                                                        })}
                                                         aria-label={`Edit ${product.name}`}
                                                         data-test={`edit-${product.slug}`}
                                                     >
@@ -214,9 +261,16 @@ export default function ProductsIndex() {
                                                     size="sm"
                                                     variant="outline"
                                                     onClick={() => {
-                                                        if (confirm(`Delete ${product.name}?`)) {
-                                                            void router.delete(
-                                                                show.url({ product: product.slug }),
+                                                        if (
+                                                            confirm(
+                                                                `Delete ${product.name}?`,
+                                                            )
+                                                        ) {
+                                                            router.delete(
+                                                                show.url({
+                                                                    product:
+                                                                        product.slug,
+                                                                }),
                                                             );
                                                         }
                                                     }}
@@ -233,7 +287,10 @@ export default function ProductsIndex() {
 
                             {products.data.length === 0 && (
                                 <tr>
-                                    <td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">
+                                    <td
+                                        colSpan={4}
+                                        className="px-4 py-8 text-center text-muted-foreground"
+                                    >
                                         No products found.
                                     </td>
                                 </tr>
@@ -242,7 +299,7 @@ export default function ProductsIndex() {
                     </table>
                 </div>
 
-                {meta && meta.last_page > 1 && (
+                {meta.last_page > 1 && (
                     <div className="flex flex-wrap items-center justify-between gap-3">
                         <p className="text-sm text-muted-foreground">
                             {meta.from}–{meta.to} of {meta.total} products
@@ -258,7 +315,10 @@ export default function ProductsIndex() {
                                 Previous
                             </Button>
 
-                            {Array.from({ length: meta.last_page }, (_, i) => i + 1)
+                            {Array.from(
+                                { length: meta.last_page },
+                                (_, i) => i + 1,
+                            )
                                 .filter(
                                     (page) =>
                                         page === 1 ||
@@ -266,12 +326,22 @@ export default function ProductsIndex() {
                                         Math.abs(page - meta.current_page) <= 1,
                                 )
                                 .map((page, position, pages) => (
-                                    <span key={page} className="flex items-center gap-1">
-                                        {position > 0 && page - pages[position - 1] > 1 && (
-                                            <span className="px-1 text-muted-foreground">…</span>
-                                        )}
+                                    <span
+                                        key={page}
+                                        className="flex items-center gap-1"
+                                    >
+                                        {position > 0 &&
+                                            page - pages[position - 1] > 1 && (
+                                                <span className="px-1 text-muted-foreground">
+                                                    …
+                                                </span>
+                                            )}
                                         <Button
-                                            variant={page === meta.current_page ? 'default' : 'outline'}
+                                            variant={
+                                                page === meta.current_page
+                                                    ? 'default'
+                                                    : 'outline'
+                                            }
                                             size="sm"
                                             onClick={() => goToPage(page)}
                                         >

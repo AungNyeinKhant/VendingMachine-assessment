@@ -9,19 +9,20 @@ class DemoProductsSeeder extends Seeder
 {
     /**
      * Extra snacks so pagination (per page 5/10/25) is visible in the demo.
-     * Idempotent: updateOrCreate by name.
+     * Idempotent and insert-only (see run()).
      */
     public function run(): void
     {
         foreach ($this->catalog() as $product) {
-            $existing = Product::query()->firstWhere('name', $product['name']);
-
-            if ($existing === null) {
-                $product['slug'] = (new Product)->slugify($product['name']);
-                Product::query()->create($product);
-            } else {
-                $existing->fill($product)->save();
+            // Insert-only: runs on every deploy/restart (Render free tier restarts when
+            // it wakes up), so it must never overwrite stock or prices an admin changed.
+            // withTrashed(): a soft-deleted product keeps its unique name — don't recreate it.
+            if (Product::withTrashed()->where('name', $product['name'])->exists()) {
+                continue;
             }
+
+            $product['slug'] = (new Product)->slugify($product['name']);
+            Product::query()->create($product);
         }
     }
 

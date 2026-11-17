@@ -19,7 +19,7 @@ type PurchaseFormData = {
 
 const DECIMAL_PATTERN = /^\d+(\.\d{1,3})?$/;
 
-function isBlank(value: unknown): boolean {
+function isBlank(value: string | number | null | undefined): boolean {
     return value === null || value === undefined || String(value).trim() === '';
 }
 
@@ -53,9 +53,14 @@ export function validateProduct(data: ProductFormData): FormErrors {
     if (isBlank(data.quantity_available)) {
         errors.quantity_available = 'The quantity available field is required.';
     } else if (!/^\d+$/.test(quantity)) {
-        errors.quantity_available = 'The quantity available must be an integer.';
+        errors.quantity_available =
+            'The quantity available must be an integer.';
     } else if (Number.parseInt(quantity, 10) < 0) {
-        errors.quantity_available = 'The quantity available must be at least 0.';
+        errors.quantity_available =
+            'The quantity available must be at least 0.';
+    } else if (Number.parseInt(quantity, 10) > 100000) {
+        errors.quantity_available =
+            'The quantity available may not be greater than 100000.';
     }
 
     return errors;
@@ -71,6 +76,8 @@ export function validatePurchase(data: PurchaseFormData): FormErrors {
         errors.quantity = 'The quantity field is required.';
     } else if (!/^\d+$/.test(quantity) || Number.parseInt(quantity, 10) < 1) {
         errors.quantity = 'The quantity must be at least 1.';
+    } else if (Number.parseInt(quantity, 10) > 1000) {
+        errors.quantity = 'The quantity may not be greater than 1000.';
     }
 
     if (isBlank(data.amount_paid)) {
@@ -80,9 +87,13 @@ export function validatePurchase(data: PurchaseFormData): FormErrors {
         const parsed = Number.parseFloat(amount);
 
         if (!DECIMAL_PATTERN.test(amount) || Number.isNaN(parsed)) {
-            errors.amount_paid = 'The amount inserted must be a number with up to 3 decimals.';
+            errors.amount_paid =
+                'The amount inserted must be a number with up to 3 decimals.';
         } else if (parsed <= 0) {
             errors.amount_paid = 'The amount inserted must be greater than 0.';
+        } else if (parsed > 10000) {
+            errors.amount_paid =
+                'The amount inserted may not be greater than 10000.';
         }
     }
 

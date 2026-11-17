@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Database;
 
-use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Connection;
 use PDO;
 use PDOStatement;
 
@@ -18,7 +18,7 @@ use PDOStatement;
  */
 class PdoConnection
 {
-    public function __construct(private readonly ConnectionInterface $connection) {}
+    public function __construct(private readonly Connection $connection) {}
 
     public function pdo(): PDO
     {
@@ -34,7 +34,7 @@ class PdoConnection
      */
     public function select(string $sql, array $params = []): array
     {
-        return $this->run($sql, $params)->fetchAll(PDO::FETCH_ASSOC);
+        return array_values($this->run($sql, $params)->fetchAll(PDO::FETCH_ASSOC));
     }
 
     /**

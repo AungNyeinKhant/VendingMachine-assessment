@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use RuntimeException;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,11 +19,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(JwtService::class, fn () => new JwtService(
-            secret: (string) config('services.jwt.secret'),
-            issuer: (string) config('app.url'),
-            ttlSeconds: (int) config('services.jwt.ttl', 3600),
-        ));
+        $this->app->singleton(JwtService::class, function (): JwtService {
+            $secret = (string) config('services.jwt.secret');
+
+            // firebase/php-jwt rejects HS256 keys under 256 bits with a vague "key too short";
+            // say exactly what to fix instead.
+            if (strlen($secret) < 32) {
+                throw new RuntimeException('JWT_SECRET must be at least 32 bytes. Generate one with: php -r "echo bin2hex(random_bytes(32));"');
+            }
+
+            return new JwtService(
+                secret: $secret,
+                issuer: (string) config('app.url'),
+                ttlSeconds: (int) config('services.jwt.ttl', 3600),
+            );
+        });
     }
 
     /**

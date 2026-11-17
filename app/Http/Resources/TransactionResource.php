@@ -22,7 +22,7 @@ class TransactionResource extends JsonResource
         $createdAt = $resource['created_at'] ?? $resource->created_at ?? null;
         $createdAtString = '';
         if ($createdAt instanceof \DateTimeInterface) {
-            $createdAtString = $createdAt->toIso8601String();
+            $createdAtString = $createdAt->format(DATE_ATOM);
         } elseif (is_string($createdAt)) {
             $createdAtString = $createdAt;
         }

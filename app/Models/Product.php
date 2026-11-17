@@ -53,14 +53,33 @@ class Product extends Model
      */
     public function slugify(string $name): string
     {
-        $base = Str::slug($name);
+        // Names like "!!!" slugify to "" — fall back so every product stays routable.
+        $base = Str::slug($name) ?: 'product';
         $slug = $base;
         $suffix = 2;
 
-        while (static::query()->where('slug', $slug)->when($this->exists, fn ($q) => $q->whereKeyNot($this->getKey()))->exists()) {
+        while (in_array($slug, self::RESERVED_SLUGS, true) || $this->slugTaken($slug)) {
             $slug = $base.'-'.$suffix++;
         }
 
         return $slug;
+    }
+
+    /**
+     * Slugs that would collide with literal route segments under /products.
+     *
+     * @var list<string>
+     */
+    private const RESERVED_SLUGS = ['create'];
+
+    /**
+     * Includes soft-deleted rows: the DB unique index on `slug` still covers them.
+     */
+    private function slugTaken(string $slug): bool
+    {
+        return static::withTrashed()
+            ->where('slug', $slug)
+            ->when($this->exists, fn ($q) => $q->whereKeyNot($this->getKey()))
+            ->exists();
     }
 }

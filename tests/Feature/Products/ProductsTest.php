@@ -133,6 +133,33 @@ class ProductsTest extends TestCase
         $this->post(route('products.store'), [])->assertRedirect(route('login'));
     }
 
+    public function test_name_of_a_soft_deleted_product_is_still_taken(): void
+    {
+        Product::factory()->create(['name' => 'Coke'])->delete();
+
+        $this->actingAs($this->user('admin'))
+            ->post(route('products.store'), ['name' => 'Coke', 'price' => '3.99', 'quantity_available' => 1])
+            ->assertSessionHasErrors('name');
+    }
+
+    public function test_slug_falls_back_and_avoids_reserved_segments(): void
+    {
+        $admin = $this->user('admin');
+
+        $this->actingAs($admin)->post(route('products.store'), ['name' => '!!!', 'price' => '1', 'quantity_available' => 1]);
+        $this->actingAs($admin)->post(route('products.store'), ['name' => 'Create', 'price' => '1', 'quantity_available' => 1]);
+
+        $this->assertDatabaseHas('products', ['name' => '!!!', 'slug' => 'product']);
+        $this->assertDatabaseHas('products', ['name' => 'Create', 'slug' => 'create-2']);
+    }
+
+    public function test_array_search_param_is_ignored_instead_of_crashing(): void
+    {
+        $this->actingAs($this->user('user'))
+            ->get(route('products.index', ['q' => ['x'], 'sort' => ['name']]))
+            ->assertOk();
+    }
+
     private function user(string $role): User
     {
         return User::factory()->create()->assignRole($role);

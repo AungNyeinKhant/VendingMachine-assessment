@@ -19,8 +19,9 @@ class PurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'quantity' => ['required', 'integer', 'min:1'],
-            'amount_paid' => ['required', 'numeric', 'gt:0', 'decimal:0,3'],
+            'quantity' => ['required', 'integer', 'min:1', 'max:1000'],
+            // Upper bound keeps amount_paid / change_given inside DECIMAL(12,3); a machine takes at most $10,000.
+            'amount_paid' => ['required', 'numeric', 'gt:0', 'max:10000', 'decimal:0,3'],
         ];
     }
 }
