@@ -76,3 +76,13 @@ app/Support/                     Money (bcmath)
 - Conventional commits (`feat(scope):`, `fix:`, `test:`, `docs:`, `chore:`), small and focused.
 - Code, comments, commits and docs in English.
 - Keep it simple: no features beyond the plan; explain trade-offs in `docs/DECISIONS.md`.
+
+## Project skills
+
+Activate these project skills before working in their area — they hold the templates that keep the code consistent:
+
+- `vending-backend-structure` — any controller, service, repository, model, migration, FormRequest, DTO, domain exception or money logic.
+- `vending-assessment-requirements` — PDO / `PdoConnection` / `PdoTransactionRepository`, attribute routes, roles & permissions, JWT API, `docs/DECISIONS.md`, or deciding whether to implement an assessment task literally.
+- `vending-testing` — writing or changing any test (unit tests with mocks and no DB, feature tests, API/JWT tests).
+
+For this project's architecture these skills take precedence over the generic `laravel-best-practices` advice (e.g. controllers do not call Eloquent directly; they go through repository interfaces).
