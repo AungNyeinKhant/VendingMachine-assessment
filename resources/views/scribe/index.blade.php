@@ -26,7 +26,7 @@
             </style>
 
     <script>
-        var tryItOutBaseUrl = "http://localhost:8000";
+        var tryItOutBaseUrl = "https://vendingmachine-assessment.onrender.com";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
@@ -132,12 +132,10 @@
     <div class="content">
         <h1 id="introduction">Introduction</h1>
 <aside>
-    <strong>Base URL</strong>: <code>http://localhost:8000</code>
+    <strong>Base URL</strong>: <code>https://vendingmachine-assessment.onrender.com</code>
 </aside>
-<pre><code>This documentation aims to provide all the information you need to work with our API.
-
-&lt;aside&gt;As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
-You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).&lt;/aside&gt;</code></pre>
+<p>REST API for the vending machine (v1). Get a token from <code>POST /api/v1/auth/login</code>, then send it as <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+<p>Demo accounts: <code>admin@vending.test</code> / <code>password</code> (can manage products) and <code>user@vending.test</code> / <code>password</code> (can buy). Prices are decimal strings with 3 decimals, e.g. <code>"6.885"</code>.</p>
 
         <h1 id="authenticating-requests">Authenticating requests</h1>
 <p>To authenticate requests, include an <strong><code>Authorization</code></strong> header with the value <strong><code>"Bearer {YOUR_JWT_TOKEN}"</code></strong>.</p>
@@ -162,7 +160,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/auth/login" \
+    "https://vendingmachine-assessment.onrender.com/api/v1/auth/login" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -174,7 +172,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/auth/login"
+    "https://vendingmachine-assessment.onrender.com/api/v1/auth/login"
 );
 
 const headers = {
@@ -334,7 +332,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/auth/me" \
+    --get "https://vendingmachine-assessment.onrender.com/api/v1/auth/me" \
     --header "Authorization: Bearer {YOUR_JWT_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -342,7 +340,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/auth/me"
+    "https://vendingmachine-assessment.onrender.com/api/v1/auth/me"
 );
 
 const headers = {
@@ -477,14 +475,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/products?sort=price&amp;direction=desc&amp;per_page=10&amp;q=pep" \
+    --get "https://vendingmachine-assessment.onrender.com/api/v1/products?sort=price&amp;direction=desc&amp;per_page=10&amp;q=pep" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/products"
+    "https://vendingmachine-assessment.onrender.com/api/v1/products"
 );
 
 const params = {
@@ -535,8 +533,8 @@ access-control-allow-origin: *
         }
     ],
     &quot;links&quot;: {
-        &quot;first&quot;: &quot;http://localhost:8000/api/v1/products?sort=price&amp;direction=desc&amp;per_page=10&amp;q=pep&amp;page=1&quot;,
-        &quot;last&quot;: &quot;http://localhost:8000/api/v1/products?sort=price&amp;direction=desc&amp;per_page=10&amp;q=pep&amp;page=1&quot;,
+        &quot;first&quot;: &quot;https://vendingmachine-assessment.onrender.com/api/v1/products?sort=price&amp;direction=desc&amp;per_page=10&amp;q=pep&amp;page=1&quot;,
+        &quot;last&quot;: &quot;https://vendingmachine-assessment.onrender.com/api/v1/products?sort=price&amp;direction=desc&amp;per_page=10&amp;q=pep&amp;page=1&quot;,
         &quot;prev&quot;: null,
         &quot;next&quot;: null
     },
@@ -552,7 +550,7 @@ access-control-allow-origin: *
                 &quot;active&quot;: false
             },
             {
-                &quot;url&quot;: &quot;http://localhost:8000/api/v1/products?sort=price&amp;direction=desc&amp;per_page=10&amp;q=pep&amp;page=1&quot;,
+                &quot;url&quot;: &quot;https://vendingmachine-assessment.onrender.com/api/v1/products?sort=price&amp;direction=desc&amp;per_page=10&amp;q=pep&amp;page=1&quot;,
                 &quot;label&quot;: &quot;1&quot;,
                 &quot;page&quot;: 1,
                 &quot;active&quot;: true
@@ -564,7 +562,7 @@ access-control-allow-origin: *
                 &quot;active&quot;: false
             }
         ],
-        &quot;path&quot;: &quot;http://localhost:8000/api/v1/products&quot;,
+        &quot;path&quot;: &quot;https://vendingmachine-assessment.onrender.com/api/v1/products&quot;,
         &quot;per_page&quot;: 10,
         &quot;to&quot;: 1,
         &quot;total&quot;: 1
@@ -707,14 +705,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/products/1" \
+    --get "https://vendingmachine-assessment.onrender.com/api/v1/products/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/products/1"
+    "https://vendingmachine-assessment.onrender.com/api/v1/products/1"
 );
 
 const headers = {
@@ -868,7 +866,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/products" \
+    "https://vendingmachine-assessment.onrender.com/api/v1/products" \
     --header "Authorization: Bearer {YOUR_JWT_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -882,7 +880,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/products"
+    "https://vendingmachine-assessment.onrender.com/api/v1/products"
 );
 
 const headers = {
@@ -1043,7 +1041,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:8000/api/v1/products/1" \
+    "https://vendingmachine-assessment.onrender.com/api/v1/products/1" \
     --header "Authorization: Bearer {YOUR_JWT_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -1057,7 +1055,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/products/1"
+    "https://vendingmachine-assessment.onrender.com/api/v1/products/1"
 );
 
 const headers = {
@@ -1243,7 +1241,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost:8000/api/v1/products/1" \
+    "https://vendingmachine-assessment.onrender.com/api/v1/products/1" \
     --header "Authorization: Bearer {YOUR_JWT_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1251,7 +1249,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/products/1"
+    "https://vendingmachine-assessment.onrender.com/api/v1/products/1"
 );
 
 const headers = {
@@ -1404,7 +1402,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/transactions" \
+    --get "https://vendingmachine-assessment.onrender.com/api/v1/transactions" \
     --header "Authorization: Bearer {YOUR_JWT_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1412,7 +1410,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/transactions"
+    "https://vendingmachine-assessment.onrender.com/api/v1/transactions"
 );
 
 const headers = {
@@ -1552,7 +1550,7 @@ product unavailable, 422 not enough money.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/v1/products/1/purchase" \
+    "https://vendingmachine-assessment.onrender.com/api/v1/products/1/purchase" \
     --header "Authorization: Bearer {YOUR_JWT_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -1565,7 +1563,7 @@ product unavailable, 422 not enough money.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/products/1/purchase"
+    "https://vendingmachine-assessment.onrender.com/api/v1/products/1/purchase"
 );
 
 const headers = {
