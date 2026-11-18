@@ -48,6 +48,7 @@ git push -u origin main
 3. **Environment Variables** (add all):
     | Key                     | Value                                                                       |
     | ----------------------- | --------------------------------------------------------------------------- |
+    | `APP_NAME`              | `Vending Machine`                                                           |
     | `APP_ENV`               | `production`                                                                |
     | `APP_DEBUG`             | `false`                                                                     |
     | `APP_URL`               | `https://<your-service>.onrender.com` (fill after first deploy)             |

@@ -18,6 +18,14 @@ abstract class TestCase extends BaseTestCase
     /** @var class-string<Seeder> */
     protected string $seeder = RolesAndPermissionsSeeder::class;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Tests must not depend on a fresh `npm run build` manifest.
+        $this->withoutVite();
+    }
+
     protected function skipUnlessFortifyHas(string $feature, ?string $message = null): void
     {
         if (! Features::enabled($feature)) {

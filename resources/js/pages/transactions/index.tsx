@@ -3,6 +3,7 @@ import { setLayoutProps } from '@inertiajs/react';
 import Heading from '@/components/heading';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { formatDateTime } from '@/lib/date';
 import { formatPrice } from '@/lib/money';
 import { index as transactionsIndex } from '@/routes/transactions';
 import type { PaginatedTransactions } from '@/types';
@@ -92,7 +93,7 @@ export default function TransactionsIndex() {
                                         {formatPrice(transaction.change_given)}
                                     </td>
                                     <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
-                                        {transaction.created_at}
+                                        {formatDateTime(transaction.created_at)}
                                     </td>
                                 </tr>
                             ))}

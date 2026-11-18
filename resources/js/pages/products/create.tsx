@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import Heading from '@/components/heading';
-import { create } from '@/routes/products';
+import { create, store } from '@/routes/products';
 import ProductForm from './partials/product-form';
 
 export default function CreateProduct() {
@@ -15,7 +15,7 @@ export default function CreateProduct() {
                 />
 
                 <ProductForm
-                    submitUrl={create.url()}
+                    submitUrl={store.url()}
                     submitMethod="post"
                     submitLabel="Create product"
                 />

@@ -1,7 +1,7 @@
 import { Head, usePage } from '@inertiajs/react';
 import { setLayoutProps } from '@inertiajs/react';
 import Heading from '@/components/heading';
-import { index, edit } from '@/routes/products';
+import { edit, index, update } from '@/routes/products';
 import type { Product } from '@/types';
 import ProductForm from './partials/product-form';
 
@@ -34,7 +34,7 @@ export default function EditProduct() {
 
                 <ProductForm
                     product={product}
-                    submitUrl={edit.url({ product: product.slug })}
+                    submitUrl={update.url({ product: product.slug })}
                     submitMethod="put"
                     submitLabel="Save changes"
                 />

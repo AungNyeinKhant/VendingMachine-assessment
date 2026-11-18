@@ -160,6 +160,16 @@ class ProductsTest extends TestCase
             ->assertOk();
     }
 
+    public function test_forbidden_page_uses_the_app_error_page_outside_local(): void
+    {
+        $this->app['env'] = 'production';
+
+        $this->actingAs($this->user('user'))
+            ->get(route('products.create'))
+            ->assertForbidden()
+            ->assertInertia(fn (Assert $page) => $page->component('error')->where('status', 403));
+    }
+
     private function user(string $role): User
     {
         return User::factory()->create()->assignRole($role);

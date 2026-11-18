@@ -20,6 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { formatDateTime } from '@/lib/date';
 import { formatPrice } from '@/lib/money';
 import { create, edit, index, purchase, show } from '@/routes/products';
 import type { Auth, PaginatedProducts, Product, ProductFilters } from '@/types';
@@ -30,11 +31,15 @@ type ProductsIndexProps = {
     auth: Auth;
 };
 
-const SORTABLE_COLUMNS: Array<{ label: string; sort: string }> = [
+const SORTABLE_COLUMNS: Array<{
+    label: string;
+    sort: string;
+    className?: string;
+}> = [
     { label: 'Name', sort: 'name' },
     { label: 'Price', sort: 'price' },
     { label: 'In stock', sort: 'quantity_available' },
-    { label: 'Added', sort: 'created_at' },
+    { label: 'Added', sort: 'created_at', className: 'hidden md:table-cell' },
 ];
 
 export default function ProductsIndex() {
@@ -164,7 +169,10 @@ export default function ProductsIndex() {
                         <thead className="bg-muted/50 text-left">
                             <tr>
                                 {SORTABLE_COLUMNS.map((column) => (
-                                    <th key={column.sort} className="px-4 py-3">
+                                    <th
+                                        key={column.sort}
+                                        className={`px-4 py-3 ${column.className ?? ''}`}
+                                    >
                                         <button
                                             type="button"
                                             className="flex items-center gap-1 hover:text-foreground"
@@ -214,6 +222,9 @@ export default function ProductsIndex() {
                                         >
                                             {product.quantity_available}
                                         </Badge>
+                                    </td>
+                                    <td className="hidden px-4 py-3 whitespace-nowrap text-muted-foreground md:table-cell">
+                                        {formatDateTime(product.created_at)}
                                     </td>
                                     <td className="px-4 py-3 text-right whitespace-nowrap">
                                         {canPurchase && (
@@ -288,7 +299,7 @@ export default function ProductsIndex() {
                             {products.data.length === 0 && (
                                 <tr>
                                     <td
-                                        colSpan={4}
+                                        colSpan={5}
                                         className="px-4 py-8 text-center text-muted-foreground"
                                     >
                                         No products found.
