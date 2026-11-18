@@ -6,24 +6,41 @@
 erDiagram
     USERS ||--o{ TRANSACTIONS : "has many"
     PRODUCTS ||--o{ TRANSACTIONS : "has many"
+    USERS }o--o{ ROLES : "model_has_roles"
+    ROLES }o--o{ PERMISSIONS : "role_has_permissions"
 
     USERS {
         bigint id PK
         string name
         string email UK
-        string password
-        timestamp remember_token
-        timestamps created_at, updated_at
+        timestamp email_verified_at "nullable, unused (no email verification)"
+        string password "bcrypt hash"
+        string remember_token "nullable"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    ROLES {
+        bigint id PK
+        string name "admin, user"
+        string guard_name
+    }
+
+    PERMISSIONS {
+        bigint id PK
+        string name "products.manage, products.purchase, transactions.view-all"
+        string guard_name
     }
 
     PRODUCTS {
         bigint id PK
         string name UK
         string slug UK
-        decimal(10,3) price
+        decimal price "DECIMAL(10,3)"
         int quantity_available
-        timestamps created_at, updated_at
-        timestamp deleted_at
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at "nullable (soft delete)"
     }
 
     TRANSACTIONS {
@@ -31,11 +48,11 @@ erDiagram
         bigint user_id FK
         bigint product_id FK
         int quantity
-        decimal(10,3) unit_price
-        decimal(12,3) total_price
-        decimal(12,3) amount_paid
-        decimal(12,3) change_given
-        timestamp created_at
+        decimal unit_price "DECIMAL(10,3)"
+        decimal total_price "DECIMAL(12,3)"
+        decimal amount_paid "DECIMAL(12,3)"
+        decimal change_given "DECIMAL(12,3)"
+        timestamp created_at "set by the repository on insert"
     }
 ```
 
@@ -43,9 +60,17 @@ erDiagram
 
 ### `users`
 
-Standard Laravel users table (from starter kit) plus spatie permissions tables:
+| Column                     | Type         | Constraints      | Rationale                                 |
+| -------------------------- | ------------ | ---------------- | ----------------------------------------- |
+| `id`                       | BIGINT       | PK               |                                           |
+| `name`                     | VARCHAR(255) | NOT NULL         |                                           |
+| `email`                    | VARCHAR(255) | UNIQUE, NOT NULL | Login identifier                          |
+| `email_verified_at`        | TIMESTAMP    | NULLABLE         | From the starter kit; verification is off |
+| `password`                 | VARCHAR(255) | NOT NULL         | bcrypt hash, never plain text             |
+| `remember_token`           | VARCHAR(100) | NULLABLE         | "Remember me" cookie token                |
+| `created_at`, `updated_at` | TIMESTAMP    | NULLABLE         | Laravel timestamps                        |
 
-- `roles`, `permissions`, `model_has_roles`, `model_has_permissions`, `role_has_permissions`
+Roles and permissions live in the spatie tables: `roles`, `permissions`, `model_has_roles`, `model_has_permissions`, `role_has_permissions`.
 
 ### `products`
 
@@ -61,17 +86,17 @@ Standard Laravel users table (from starter kit) plus spatie permissions tables:
 
 ### `transactions`
 
-| Column         | Type          | Constraints                          | Rationale                           |
-| -------------- | ------------- | ------------------------------------ | ----------------------------------- |
-| `id`           | BIGINT        | PK, Auto Increment                   |                                     |
-| `user_id`      | BIGINT        | FK → users.id, ON DELETE RESTRICT    | Prevent orphan transactions         |
-| `product_id`   | BIGINT        | FK → products.id, ON DELETE RESTRICT | Preserve price snapshot integrity   |
-| `quantity`     | INT           | UNSIGNED, NOT NULL                   | >= 1                                |
-| `unit_price`   | DECIMAL(10,3) | NOT NULL                             | **Price snapshot** at purchase time |
-| `total_price`  | DECIMAL(12,3) | NOT NULL                             | unit_price × quantity               |
-| `amount_paid`  | DECIMAL(12,3) | NOT NULL                             | Money inserted by customer          |
-| `change_given` | DECIMAL(12,3) | NOT NULL                             | amount_paid - total_price           |
-| `created_at`   | TIMESTAMP     | NOT NULL                             | Immutable audit timestamp           |
+| Column         | Type          | Constraints                          | Rationale                                   |
+| -------------- | ------------- | ------------------------------------ | ------------------------------------------- |
+| `id`           | BIGINT        | PK, Auto Increment                   |                                             |
+| `user_id`      | BIGINT        | FK → users.id, ON DELETE RESTRICT    | Prevent orphan transactions                 |
+| `product_id`   | BIGINT        | FK → products.id, ON DELETE RESTRICT | Preserve price snapshot integrity           |
+| `quantity`     | INT           | UNSIGNED, NOT NULL                   | >= 1                                        |
+| `unit_price`   | DECIMAL(10,3) | NOT NULL                             | **Price snapshot** at purchase time         |
+| `total_price`  | DECIMAL(12,3) | NOT NULL                             | unit_price × quantity                       |
+| `amount_paid`  | DECIMAL(12,3) | NOT NULL                             | Money inserted by customer                  |
+| `change_given` | DECIMAL(12,3) | NOT NULL                             | amount_paid - total_price                   |
+| `created_at`   | TIMESTAMP     | NULLABLE, always set on insert       | Immutable audit timestamp (no `updated_at`) |
 
 **Indexes**:
 

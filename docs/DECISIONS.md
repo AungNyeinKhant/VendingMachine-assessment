@@ -5,7 +5,7 @@
 | Task                     | Approach | How                                                                                                                                                                                                                                                                                                                                                                          |
 | ------------------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1 DB design              | ✍️       | Migrations + `docs/DATABASE.md` (ERD, field rationale)                                                                                                                                                                                                                                                                                                                       |
-| 2 PDO + CRUD             | ✍️ + 📦  | `App\Database\PdoConnection` (thin wrapper over Laravel's PDO handle) + `PdoTransactionRepository` (raw PDO prepared statements); products via Eloquent repo; users via Fortify                                                                                                                                                                                              |
+| 2 PDO + CRUD             | ✍️ + 📦  | `App\Database\PdoConnection` (thin wrapper over Laravel's PDO handle) + `PdoTransactionRepository` and `PdoUserRepository` (raw PDO prepared statements); products via Eloquent repo                                                                                                                                                                                         |
 | 3 Sessions + hashing     | 📦       | Laravel Fortify — session guard + `Hash` (bcrypt). Login throttling built in                                                                                                                                                                                                                                                                                                 |
 | 4 RBAC                   | 📦 + 💬  | `spatie/laravel-permission`. Roles `admin`, `user`; permissions `products.manage`, `products.purchase`, `transactions.view-all`. Code checks **permissions**, never role names (except seeding). **Role is NOT stored in session or JWT** — a session-cached role survives demotion until logout (stale privilege). Spatie reads from DB with cache it invalidates on change |
 | 5–6 ProductsController   | ✍️       | Thin controller → `PurchaseService`                                                                                                                                                                                                                                                                                                                                          |
@@ -39,13 +39,15 @@ Legend: ✍️ implemented literally · 📦 fulfilled via framework/library · 
 
 ### ADR-004: Repository Layer (Why Here, When Not)
 
-**Decision**: Repository interfaces (`ProductRepositoryInterface`, `TransactionRepositoryInterface`) with Eloquent and PDO implementations, bound in `RepositoryServiceProvider`.
+**Decision**: Repository interfaces (`ProductRepositoryInterface`, `TransactionRepositoryInterface`, `UserRepositoryInterface`) with Eloquent and PDO implementations, bound in `RepositoryServiceProvider`.
 **Reasoning**: The assessment explicitly requires controller tests without database (Task 15). Eloquent static calls (`Product::create()`) can't be swapped for mocks; an injected interface can. In a typical Laravel app we'd test with feature tests against a test DB instead — but the requirement drives the architecture.
 
 ### ADR-005: PDO Repository (Task 2)
 
-**Decision**: `App\Database\PdoConnection` (thin wrapper over Laravel's PDO handle) + `PdoTransactionRepository` (raw PDO prepared statements). The PDO handle comes from Laravel's connection so it shares the same DB transaction.
+**Decision**: `App\Database\PdoConnection` (thin wrapper over Laravel's PDO handle) + `PdoTransactionRepository` and `PdoUserRepository` (raw PDO prepared statements). The PDO handle comes from Laravel's connection so it shares the same DB transaction.
 **Reasoning**: Demonstrates literal understanding of Task 2 ("connection class", "CRUD using PDO") without duplicating connection config or breaking transaction atomicity. Products stay on Eloquent — the contrast (same interface, two implementations) is the demonstration.
+**Users via PDO**: registration (`CreateNewUser`), API login (`AuthController`) and the JWT guard read and create users through `UserRepositoryInterface`. Profile/password updates stay on the starter kit's Eloquent code.
+**No update/delete for transactions**: transactions are an immutable audit log (price snapshot), so the repository deliberately offers only create and read.
 
 ### ADR-006: Row Locking (Concurrency)
 
