@@ -4,7 +4,7 @@ Laravel 13 + Inertia 3 + React + TypeScript vending machine system for a Senior 
 
 ## Live Demo
 
-- **URL**: https://vending-machine-xyz.onrender.com (replace after deploy)
+- **URL**: https://vendingmachine-assessment.onrender.com (free tier: the first request after idle can take ~50 s)
 - **Admin**: `admin@vending.test` / `password`
 - **User**: `user@vending.test` / `password`
 - **API Docs**: `/docs` (Scribe with "Try it out")
