@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\User;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Services\JwtService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
             $token = $request->bearerToken();
             $id = $token ? app(JwtService::class)->userIdFrom($token) : null;
 
-            return $id ? User::find($id) : null;
+            return $id ? app(UserRepositoryInterface::class)->findById($id) : null;
         });
     }
 
