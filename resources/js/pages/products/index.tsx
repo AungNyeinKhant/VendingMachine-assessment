@@ -209,7 +209,7 @@ export default function ProductsIndex() {
                                             {product.name}
                                         </Link>
                                     </td>
-                                    <td className="px-4 py-3">
+                                    <td className="px-4 py-3 font-mono font-semibold whitespace-nowrap text-primary tabular-nums">
                                         {formatPrice(product.price)}
                                     </td>
                                     <td className="px-4 py-3">
