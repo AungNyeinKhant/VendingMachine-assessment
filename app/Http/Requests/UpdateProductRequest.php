@@ -47,4 +47,18 @@ class UpdateProductRequest extends FormRequest
             'quantity_available' => $this->integer('quantity_available'),
         ];
     }
+
+    /**
+     * Examples for the API docs (Scribe).
+     *
+     * @return array<string, array{description: string, example: mixed}>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'name' => ['description' => 'Unique product name.', 'example' => 'Iced Coffee'],
+            'price' => ['description' => 'Price in USD, up to 3 decimals.', 'example' => '2.875'],
+            'quantity_available' => ['description' => 'Units in the machine.', 'example' => 12],
+        ];
+    }
 }

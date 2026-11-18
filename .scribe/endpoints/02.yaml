@@ -1,0 +1,148 @@
+name: Purchases
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/transactions
+    metadata:
+      custom: []
+      groupName: Purchases
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List transactions'
+      description: "Users see their own purchases; holders of `transactions.view-all` see everyone's."
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_JWT_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data": [{"id": 1, "product_name": "Pepsi", "quantity": 3, "unit_price": "6.885", "total_price": "20.655", "amount_paid": "25.000", "change_given": "4.345", "created_at": "2026-11-18T03:46:09+00:00"}]}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/products/{product_id}/purchase'
+    metadata:
+      custom: []
+      groupName: Purchases
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Purchase a product'
+      description: |-
+        The server reads the price from the database (locked row) — clients only send
+        the quantity and the money inserted. Domain errors: 409 not enough stock /
+        product unavailable, 422 not enough money.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_JWT_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      product_id:
+        custom: []
+        name: product_id
+        description: 'The ID of the product.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      product:
+        custom: []
+        name: product
+        description: 'The product ID.'
+        required: true
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      product_id: 1
+      product: 2
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      quantity:
+        custom: []
+        name: quantity
+        description: 'How many to buy (1–1000, at most the stock). Must be at least 1. Must not be greater than 1000.'
+        required: true
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      amount_paid:
+        custom: []
+        name: amount_paid
+        description: 'Money inserted in USD, up to 3 decimals (max 10000). Must not be greater than 10000.'
+        required: true
+        example: 25.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      quantity: 3
+      amount_paid: 25.0
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: '{"transaction_id": 1, "product_name": "Pepsi", "quantity": 3, "unit_price": "6.885", "total_price": "20.655", "amount_paid": "25.000", "change_given": "4.345"}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 409
+        content: '{"message": "Only 7 left in stock.", "errors": {"quantity": ["Only 7 left in stock."]}}'
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 422
+        content: '{"message": "You need to insert at least 20.655 USD.", "errors": {"amount_paid": ["You need to insert at least 20.655 USD."]}}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

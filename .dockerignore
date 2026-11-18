@@ -40,6 +40,8 @@ phpunit.xml
 .phpunit.cache
 docs/
 *.md
+# ...except the Scribe sources the entrypoint re-renders the API docs from
+!.scribe/*.md
 docker-compose*.yml
 compose.yaml
 Dockerfile

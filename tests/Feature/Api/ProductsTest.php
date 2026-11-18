@@ -74,8 +74,8 @@ class ProductsTest extends TestCase
             ->postJson('/api/v1/products', ['name' => 'Juice', 'price' => '2.500', 'quantity_available' => 3]);
 
         $response->assertCreated()
-            ->assertJsonPath('name', 'Juice')
-            ->assertJsonPath('price', '2.500');
+            ->assertJsonPath('data.name', 'Juice')
+            ->assertJsonPath('data.price', '2.500');
     }
 
     public function test_admin_can_update_product_via_api(): void
@@ -88,7 +88,7 @@ class ProductsTest extends TestCase
             ->putJson("/api/v1/products/{$product->id}", ['name' => 'Coke Zero', 'price' => '4.500', 'quantity_available' => 5]);
 
         $response->assertOk()
-            ->assertJsonPath('name', 'Coke Zero');
+            ->assertJsonPath('data.name', 'Coke Zero');
     }
 
     public function test_admin_can_delete_product_via_api(): void
